@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Listria: Final Round Presentation - Team Innovation Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --primary-900: #1e3a8a;
+            --accent-400: #f59e0b;
+            --accent-500: #d97706;
+            --success-500: #10b981;
+            --danger-500: #ef4444;
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-800: #1e293b;
+            --neutral-900: #0f172a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--neutral-50) 0%, #e2e8f0 100%);
+            color: var(--neutral-800);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .floating-card {
+            transform: translateY(0px);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .floating-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            border-right: 3px solid var(--primary-500);
+            white-space: nowrap;
+            animation: typing 3.5s steps(30, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--primary-500); }
+        }
+
+        .profile-toggle {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-toggle.active {
+            background: var(--primary-500);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .dashboard-container {
+            min-height: 600px;
+            transition: all 0.5s ease;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .criteria-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 48px;
+            margin: 48px 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .criteria-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .workflow-step {
+            background: var(--neutral-50);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 16px 0;
+            border-left: 4px solid var(--primary-500);
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            background: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateX(8px);
+        }
+
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .code-block {
+            background: var(--neutral-900);
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 8px;
+            right: 16px;
+            background: var(--primary-500);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 32px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            background: var(--primary-500);
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px var(--primary-100);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 32px;
+            width: 2px;
+            height: calc(100% - 16px);
+            background: var(--primary-200);
+        }
+
+        .timeline-item:last-child::after { display: none; }
+
+        .responsive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            align-items: stretch;
+        }
+
+        /* Enhanced card spacing and alignment */
+        .card-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            align-items: stretch;
+        }
+
+        .card-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            align-items: stretch;
+        }
+
+        .card-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            align-items: stretch;
+        }
+
+        /* Ensure all cards have equal height */
+        .floating-card {
+            transform: translateY(0px);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+        }
+
+        .floating-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Card content spacing improvements */
+        .card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+
+        .stat-counter {
+            font-weight: 800;
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            .stat-counter { font-size: 2rem; }
+            .criteria-section { padding: 24px; margin: 24px 0; }
+        }
+
+        .dashboard-mockup {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #cbd5e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active { background: var(--primary-500); }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::before { transform: translateX(30px); }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Navigation -->
+    <nav class="nav-sticky border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                            <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-2xl font-bold gradient-text">Project Listria</span>
+                    </div>
+                    <span class="hidden md:inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Proposal</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#workflow" class="text-gray-600 hover:text-blue-600 transition-colors">Workflow</a>
+                    <a href="#uniqueness" class="text-gray-600 hover:text-blue-600 transition-colors">Uniqueness</a>
+                    <a href="#implementation" class="text-gray-600 hover:text-blue-600 transition-colors">Implementation</a>
+                    <a href="#dashboards" class="text-gray-600 hover:text-blue-600 transition-colors">Dashboards</a>
+                    <a href="#team-selection" class="text-gray-600 hover:text-blue-600 transition-colors">Why Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"></div>
+        <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glass-morphism rounded-3xl p-6 floating-card mt-12 mb-12">
+                <h1 class="text-4xl md:text-6xl font-black gradient-text mb-4">
+                    Project Listria
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 mb-6 typing-animation">
+                    Connecting the Circle of Care in India
+                </p>
+                
+                <!-- Presentation Hook -->
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-6 text-left max-w-3xl mx-auto">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">The Silent Crisis</h3>
+                            <p class="text-gray-700 text-base leading-relaxed">
+                                In India, a surgery is performed every second. But what happens after the patient goes home is a story we rarely talk about. Right now, thousands of families are navigating this journey alone. For nearly one in every three patients, that journey will end in a preventable complication.
+                            </p>
+                            <p class="text-red-600 font-semibold mt-3">
+                                This isn't just a healthcare gap—it's a silent family crisis happening across our nation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <div class="bg-white rounded-full px-6 py-3 shadow-lg border border-gray-100">
+                        <span class="text-blue-600 font-semibold">🚀 Software Platform</span>
+                    </div>
+                    <div class="bg-white rounded-full px-6 py-3 shadow-lg border border-gray-100">
+                        <span class="text-purple-600 font-semibold">💡 AI-Powered</span>
+                    </div>
+                    <div class="bg-white rounded-full px-6 py-3 shadow-lg border border-gray-100">
+                        <span class="text-green-600 font-semibold">🏥 Healthcare Innovation</span>
+                    </div>
+                </div>
+                
+                <!-- Key Statistics -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                    <div class="text-center">
+                        <div class="stat-counter gradient-text mb-2" id="counter-surgeries">3</div>
+                        <p class="text-gray-600 font-medium">Crore Annual Surgeries</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-counter gradient-text mb-2" id="counter-complications">30</div>
+                        <p class="text-gray-600 font-medium">% Complication Rate</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-counter gradient-text mb-2" id="counter-cost">₹44,000</div>
+                        <p class="text-gray-600 font-medium">Avg. Readmission Cost</p>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="mt-12">
+                    <div class="mt-8 text-center">
+                        <p class="text-gray-600 text-lg">
+                            <span class="font-semibold text-blue-600">Join us</span> in transforming post-operative care for millions of Indian families
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-blue-100 rounded-full pulse-dot"></div>
+        <div class="absolute bottom-32 right-16 w-16 h-16 bg-purple-100 rounded-full pulse-dot" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/4 w-12 h-12 bg-indigo-100 rounded-full pulse-dot" style="animation-delay: 2s;"></div>
+    </section>
+
+    <!-- The Problem Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black gradient-text mb-6">The Problem & The Human Cost</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto">
+                    The scale of this crisis is staggering. India performs over 3 crore surgeries annually, but our system is stretched to its breaking point.
+                </p>
+            </div>
+
+            <div class="card-grid-3">
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-red-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="wallet" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Financial Ruin for Families</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">A single preventable readmission costs a family a median of ₹44,000 out-of-pocket, pushing them towards financial ruin.</p>
+                    </div>
+                    <div class="card-footer text-sm text-red-600 font-medium bg-red-50 rounded-lg p-3">
+                        Catastrophic expense that destroys family savings
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-orange-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="bed" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">System Overload</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">Every preventable readmission takes a critical bed and doctor's time away from another patient in desperate need.</p>
+                    </div>
+                    <div class="card-footer text-sm text-orange-600 font-medium bg-orange-50 rounded-lg p-3">
+                        Unmet need of 2 crore surgeries annually
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-purple-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="heart-crack" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Caregiver Collapse</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">The family caregiver—our unsung hero—is untrained, unsupported, shouldering immense burden of complex clinical care.</p>
+                    </div>
+                    <div class="card-footer text-sm text-purple-600 font-medium bg-purple-50 rounded-lg p-3">
+                        We are setting them up to fail
+                    </div>
+                </div>
+            </div>
+
+            <!-- Presentation Quote -->
+            <div class="mt-16 text-center">
+                <div class="glass-morphism rounded-2xl p-8 max-w-4xl mx-auto bg-gradient-to-r from-red-50 to-orange-50">
+                    <blockquote class="text-2xl font-semibold text-gray-800 italic">
+                        "Post-operative care is dangerously fragmented. At the center of it all is the family caregiver—untrained, unsupported, and shouldering immense burden."
+                    </blockquote>
+                    <p class="text-gray-600 mt-4">— The Reality of Indian Healthcare Today</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Solution Section -->
+    <section class="criteria-section relative z-10">
+        <div class="relative z-10 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black mb-6">Our Solution: The Connected Circle of Care</h2>
+                <p class="text-xl text-blue-100 max-w-4xl mx-auto mb-8">
+                    Listria transforms this isolated struggle into a connected, supported, and intelligent journey. We are the first platform built to empower the most critical asset in Indian healthcare: the family caregiver.
+                </p>
+                
+                <!-- Presentation Script Integration -->
+                <div class="glass-morphism rounded-2xl p-8 text-left max-w-5xl mx-auto">
+                    <div class="flex items-start space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="lightbulb" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Meet Priya & Mr. Sharma</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Priya's father, Mr. Sharma, was just discharged after a knee replacement. Instead of confusing paper instructions, Priya has the Listria app. Her "Today's Guide" is simple and clear: check the wound, help with exercises, log his pain level.
+                            </p>
+                            <p class="text-blue-600 font-semibold mt-3">
+                                We provide confidence, not confusion.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h4 class="font-bold text-blue-800 mb-3">The Evening Scenario</h4>
+                        <p class="text-blue-700 mb-3">
+                            That evening, Mr. Sharma feels feverish. Priya opens the app, logs his temperature, and uploads a quick photo of the incision. She hits "Submit to AI Triage."
+                        </p>
+                        <p class="text-sm text-blue-600 italic">
+                            Experience this workflow in our interactive demo below ↓
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circle of Care Visualization - Compact Design -->
+            <div class="relative py-8">
+                <div class="flex flex-col lg:flex-row items-center justify-center space-y-8 lg:space-y-0 lg:space-x-8 relative z-10">
+                    <!-- Providers Card -->
+                    <div class="group">
+                        <div class="text-center p-4 rounded-2xl bg-white/25 backdrop-blur-md border border-white/20 shadow-xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 w-48">
+                            <div class="relative mb-3">
+                                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                                    <i data-lucide="user-check" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-400 rounded-full flex items-center justify-center">
+                                    <i data-lucide="zap" class="w-2 h-2 text-white"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-1">Healthcare Providers</h3>
+                            <p class="text-blue-100 text-sm font-medium mb-1">Mission Control Dashboard</p>
+                            <p class="text-xs text-blue-200">AI-powered insights & alerts</p>
+                            <div class="mt-2 flex justify-center space-x-1">
+                                <div class="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
+                                <div class="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                                <div class="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Connection Animation -->
+                    <div class="hidden lg:flex items-center">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-yellow-400 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-yellow-300 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                            <div class="w-2 h-2 bg-yellow-200 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Family Caregiver Central Hub -->
+                    <div class="group">
+                        <div class="text-center p-6 rounded-full border-3 border-yellow-400 bg-white/25 backdrop-blur-md shadow-xl hover:shadow-yellow-500/30 transition-all duration-300 hover:scale-105 relative">
+                            <div class="relative">
+                                <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                                    <i data-lucide="users" class="w-10 h-10 text-yellow-900"></i>
+                                </div>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 bg-yellow-300 rounded-full flex items-center justify-center animate-spin" style="animation-duration: 3s;">
+                                    <i data-lucide="heart" class="w-3 h-3 text-yellow-800"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mt-2">Family Caregiver</h3>
+                            <p class="text-yellow-300 font-bold text-sm">(Empowered Core)</p>
+                            <p class="text-yellow-100 text-xs mt-1">Recovery ecosystem hub</p>
+                            
+                            <!-- Connection Indicators -->
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <div class="w-2 h-2 bg-blue-300 rounded-full animate-ping"></div>
+                                <div class="w-2 h-2 bg-yellow-300 rounded-full"></div>
+                                <div class="w-2 h-2 bg-green-300 rounded-full animate-ping" style="animation-delay: 1s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Connection Animation -->
+                    <div class="hidden lg:flex items-center">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-green-200 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                            <div class="w-2 h-2 bg-green-300 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                            <div class="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Patients Card -->
+                    <div class="group">
+                        <div class="text-center p-4 rounded-2xl bg-white/25 backdrop-blur-md border border-white/20 shadow-xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-105 w-48">
+                            <div class="relative mb-3">
+                                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                                    <i data-lucide="heart-pulse" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full flex items-center justify-center">
+                                    <i data-lucide="trending-up" class="w-2 h-2 text-white"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-1">Patients</h3>
+                            <p class="text-green-100 text-sm font-medium mb-1">Guided Recovery Journey</p>
+                            <p class="text-xs text-green-200">Gamified & AI-supported</p>
+                            <div class="mt-2 flex justify-center space-x-1">
+                                <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                                <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                                <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Data Sync Indicator -->
+                <div class="flex justify-center mt-6">
+                    <div class="flex items-center space-x-2 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
+                        <i data-lucide="wifi" class="w-3 h-3 text-white"></i>
+                        <span class="text-white text-xs font-medium">Real-time Data Sync</span>
+                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology & Architecture Section -->
+    <section id="workflow" class="criteria-section relative z-10">
+        <div class="relative z-10 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black mb-6">01. Our Technology & Workflow</h2>
+                <p class="text-xl text-blue-100 max-w-4xl mx-auto mb-8">
+                    Our vision is ambitious, but our technology is pragmatic and built for India's reality.
+                </p>
+                
+                <!-- Presentation Script Integration -->
+                <div class="glass-morphism rounded-2xl p-8 text-left max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Built for India's Reality</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start space-x-3">
+                                    <i data-lucide="monitor-smartphone" class="w-5 h-5 text-blue-600 mt-1"></i>
+                                    <span><strong>Progressive Web App</strong> - No app store needed, works on any smartphone</span>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <i data-lucide="cpu" class="w-5 h-5 text-purple-600 mt-1"></i>
+                                    <span><strong>Microservices Backend</strong> - Resilient architecture that scales to millions</span>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <i data-lucide="bot" class="w-5 h-5 text-green-600 mt-1"></i>
+                                    <span><strong>AI Engine</strong> - Gemini API today, proprietary models tomorrow</span>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <i data-lucide="shield-check" class="w-5 h-5 text-orange-600 mt-1"></i>
+                                    <span><strong>DPDPA Compliant</strong> - Trust is our architecture, not just a feature</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-900 rounded-xl p-6">
+                            <div class="text-green-400 text-sm font-mono">
+                                <div>├── Frontend: PWA (React)</div>
+                                <div>├── Backend: Microservices</div>
+                                <div>│   ├── AI Triage Service</div>
+                                <div>│   ├── User Management</div>
+                                <div>│   ├── Notification Engine</div>
+                                <div>│   └── Analytics Dashboard</div>
+                                <div>├── AI: Gemini API → Custom</div>
+                                <div>├── Database: Encrypted</div>
+                                <div>└── Security: DPDPA 2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- User Workflow -->
+                <div class="glass-morphism rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i data-lucide="user-circle" class="w-8 h-8 mr-3 text-blue-600"></i>
+                        User Workflow
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="workflow-step">
+                            <div class="flex items-center mb-3">
+                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                                    <i data-lucide="gamepad-2" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Patient Journey</h4>
+                            </div>
+                            <p class="text-gray-600 ml-16">Gamified recovery experience with daily checklists, symptom logging, and AI-powered feedback for medication and exercise adherence.</p>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="flex items-center mb-3">
+                                <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mr-4">
+                                    <i data-lucide="users-round" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Caregiver Empowerment</h4>
+                            </div>
+                            <p class="text-gray-600 ml-16">Real-time status overview, instructional videos, task lists, and direct communication channel with the healthcare team.</p>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="flex items-center mb-3">
+                                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                                    <i data-lucide="monitor-speaker" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Provider Dashboard</h4>
+                            </div>
+                            <p class="text-gray-600 ml-16">Mission Control interface with population-level patient monitoring, risk stratification, and intelligent alert systems.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Flow Process -->
+                <div class="glass-morphism rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i data-lucide="git-branch" class="w-8 h-8 mr-3 text-purple-600"></i>
+                        Data Flow Process
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Patient/Caregiver logs symptom</h4>
+                            <p class="text-sm text-gray-600">Via mobile app with photos, voice notes, or structured input</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">AI processes data instantly</h4>
+                            <p class="text-sm text-gray-600">Gemini API analyzes symptoms and generates risk assessment</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Real-time triage decision</h4>
+                            <p class="text-sm text-gray-600">Low, medium, or high-risk classification with recommendations</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Stakeholder notification</h4>
+                            <p class="text-sm text-gray-600">Appropriate alerts sent to caregiver and/or provider</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Feedback loop completion</h4>
+                            <p class="text-sm text-gray-600">Provider response and care coordination</p>
+                        </div>
+                    </div>
+
+                    <!-- Presentation Quote -->
+                    <div class="mt-6 p-4 bg-purple-50 rounded-lg">
+                        <blockquote class="text-sm text-purple-800 italic">
+                            "For us, trust is not a feature; it's our architecture."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black gradient-text mb-6">Our Business Model: A Virtuous Cycle</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
+                    Our business model is designed for mass adoption while delivering undeniable ROI to our hospital partners.
+                </p>
+                </div>
+            </div>
+
+            <!-- B2B2C Flywheel Visualization -->
+            <div class="max-w-5xl mx-auto mb-16">
+                <div class="relative">
+                    <!-- Central Hub -->
+                    <div class="text-center mb-12">
+                        <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <div class="text-white text-center">
+                                <i data-lucide="orbit" class="w-12 h-12 mx-auto mb-2"></i>
+                                <div class="text-sm font-bold">Listria</div>
+                                <div class="text-xs">Flywheel</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flywheel Steps -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl font-bold">1</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">Free Adoption</h4>
+                            <p class="text-sm text-gray-600">Millions of families use our free app, building powerful user network</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl font-bold">2</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">Data & Network</h4>
+                            <p class="text-sm text-gray-600">Creates unmatched data asset and proves platform value</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl font-bold">3</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">Enterprise Sales</h4>
+                            <p class="text-sm text-gray-600">Hospitals see their patients already using platform, driving B2B sales</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl font-bold">4</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">Better Outcomes</h4>
+                            <p class="text-sm text-gray-600">Improved results fuel more adoption, continuing the cycle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Tiers -->
+            <div class="max-w-6xl mx-auto mb-16">
+                <div class="flex flex-col lg:flex-row gap-6 px-4 sm:px-8 lg:px-4 items-stretch">
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-green-500 flex-1 flex flex-col">
+                    <div class="card-content flex-grow">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="smartphone" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Free for Families</h3>
+                            <p class="text-gray-600 text-lg font-semibold">₹0</p>
+                        </div>
+                        <ul class="space-y-3 text-gray-600 mb-6 flex-grow">
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 mr-2"></i>Core patient app features</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 mr-2"></i>Symptom logging & AI triage</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 mr-2"></i>Basic caregiver tools</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 mr-2"></i>Recovery gamification</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer p-4 bg-green-50 rounded-lg">
+                        <p class="text-green-800 font-semibold text-sm">Strategic Purpose: Mass adoption & network effects</p>
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-blue-500 flex-1 flex flex-col">
+                    <div class="card-content flex-grow">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="hospital" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Enterprise License</h3>
+                            <p class="text-gray-600 text-lg font-semibold">₹500-800 PPPM</p>
+                        </div>
+                        <ul class="space-y-3 text-gray-600 mb-6 flex-grow">
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 mr-2"></i>Mission Control dashboard</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 mr-2"></i>Population health monitoring</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 mr-2"></i>Risk stratification alerts</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 mr-2"></i>Analytics & reporting</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer p-4 bg-blue-50 rounded-lg">
+                        <p class="text-blue-800 font-semibold text-sm">Primary Revenue Engine</p>
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-purple-500 flex-1 flex flex-col">
+                    <div class="card-content flex-grow">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="chart-line" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">ROI for Hospitals</h3>
+                            <p class="text-gray-600 text-lg font-semibold">Undeniable Value</p>
+                        </div>
+                        <ul class="space-y-3 text-gray-600 mb-6 flex-grow">
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-500 mr-2"></i>Reduced readmissions</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-500 mr-2"></i>Improved staff efficiency</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-500 mr-2"></i>Enhanced reputation</li>
+                            <li class="flex items-center"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-500 mr-2"></i>Family financial protection</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer p-4 bg-purple-50 rounded-lg">
+                        <p class="text-purple-800 font-semibold text-sm">Saves families ₹44,000+ per prevented complication</p>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Business Model Impact -->
+            <div class="text-center">
+                <div class="glass-morphism rounded-2xl p-8 max-w-4xl mx-auto">
+                    <blockquote class="text-2xl font-semibold text-gray-800 italic mb-4">
+                        "The ROI for hospitals is undeniable. For a small fee, they prevent costly readmissions, improve staff efficiency, and most importantly, help families avoid the catastrophic ₹44,000 expense of a preventable complication."
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Criteria Section 2: Uniqueness -->
+    <section id="uniqueness" class="py-24 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black gradient-text mb-6">02. Our Competitive Advantage</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
+                    While post-operative complications cost families ₹44,000 per preventable incident, Listria will be the first to address this gap comprehensively.
+                </p>
+            </div>
+
+            <!-- Competitive Advantage Cards -->
+            <div class="card-grid-2">
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-blue-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="users-round" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Caregiver-Centric Approach</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">We propose to empower the real primary caregiver - the family member who is the cornerstone of recovery in India.</p>
+                    </div>
+                    <div class="card-footer text-sm text-blue-600 font-medium bg-blue-50 rounded-lg p-3">
+                        Based on 71% reduction achieved by Noora Health study
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-purple-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="blocks" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Open Platform Design</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">Hardware-agnostic solution designed to target 82-85% of surgeries performed in small-medium hospitals.</p>
+                    </div>
+                    <div class="card-footer text-sm text-purple-600 font-medium bg-purple-50 rounded-lg p-3">
+                        Proposed scalability across India's fragmented healthcare system
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-green-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="workflow" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Complete Circle of Care</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">Intelligent three-way communication loop designed to ensure right person gets right information at right time.</p>
+                    </div>
+                    <div class="card-footer text-sm text-green-600 font-medium bg-green-50 rounded-lg p-3">
+                        Proposed real-time coordination between patient, caregiver & provider
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-orange-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Financial Security Focus</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">Designed to prevent catastrophic ₹44,000 readmission costs, addressing both health and financial security.</p>
+                    </div>
+                    <div class="card-footer text-sm text-orange-600 font-medium bg-orange-50 rounded-lg p-3">
+                        Dual mission: health security + financial protection
+                    </div>
+                </div>
+            </div>
+
+            <!-- Competitive Landscape -->
+            <div class="mt-16 glass-morphism rounded-2xl p-8">
+                <h3 class="text-2xl font-bold text-center mb-8">Competitive Positioning</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b-2 border-gray-200">
+                                <th class="text-left py-4 px-4 font-bold">Solution</th>
+                                <th class="text-left py-4 px-4 font-bold">Focus</th>
+                                <th class="text-left py-4 px-4 font-bold">Scope</th>
+                                <th class="text-left py-4 px-4 font-bold">Limitation</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="py-4 px-4 font-medium">Pristyn Care</td>
+                                <td class="py-4 px-4 text-gray-600">Surgery Facilitation</td>
+                                <td class="py-4 px-4 text-gray-600">Closed Service</td>
+                                <td class="py-4 px-4 text-gray-600">Post-op is secondary feature</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 font-medium">Manipal + ConnectedLife</td>
+                                <td class="py-4 px-4 text-gray-600">Hospital RPM</td>
+                                <td class="py-4 px-4 text-gray-600">Single Hospital</td>
+                                <td class="py-4 px-4 text-gray-600">Hardware-dependent, closed ecosystem</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 font-medium">Noora Health</td>
+                                <td class="py-4 px-4 text-gray-600">Caregiver Training</td>
+                                <td class="py-4 px-4 text-gray-600">NGO Model</td>
+                                <td class="py-4 px-4 text-gray-600">No scalable digital platform</td>
+                            </tr>
+                            <tr class="bg-blue-50">
+                                <td class="py-4 px-4 font-bold text-blue-800">Listria (Proposed)</td>
+                                <td class="py-4 px-4 font-bold text-blue-800">Complete Ecosystem</td>
+                                <td class="py-4 px-4 font-bold text-blue-800">Open Platform</td>
+                                <td class="py-4 px-4 font-bold text-blue-800">First-mover opportunity</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Criteria Section 3: Implementation Plan -->
+    <section id="implementation" class="criteria-section relative z-10">
+        <div class="relative z-10 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black mb-6">03. Implementation Plan</h2>
+                <p class="text-xl text-blue-100 max-w-4xl mx-auto">
+                    A pragmatic, phased approach designed to validate our model, achieve product-market fit, and scale effectively across India.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="glass-morphism rounded-2xl p-8">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-white">1</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">MVP Development</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Team Assembly</h4>
+                            <p class="text-sm text-gray-600">Lean team: developers, UI/UX designer, product manager</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Core Platform</h4>
+                            <p class="text-sm text-gray-600">PWA frontend + microservices backend</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">AI Integration</h4>
+                            <p class="text-sm text-gray-600">DPDPA/HIPAA-compliant APIs</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <p class="text-sm font-semibold text-blue-800">Resource: Lean & Efficient</p>
+                    </div>
+                </div>
+
+                <div class="glass-morphism rounded-2xl p-8">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-white">2</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Pilot Program</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Partner Selection</h4>
+                            <p class="text-sm text-gray-600">Select hospitals in strategic locations</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Department Focus</h4>
+                            <p class="text-sm text-gray-600">High-impact surgical departments</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Success Metrics</h4>
+                            <p class="text-sm text-gray-600">Strong adoption rates & improved outcomes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-purple-50 rounded-lg">
+                        <p class="text-sm font-semibold text-purple-800">Focus: Quality Validation</p>
+                    </div>
+                </div>
+
+                <div class="glass-morphism rounded-2xl p-8">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-white">3</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Scale & Expansion</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">B2B2C Flywheel</h4>
+                            <p class="text-sm text-gray-600">Mass adoption drives enterprise sales</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Data Moat</h4>
+                            <p class="text-sm text-gray-600">Proprietary AI models development</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4 class="font-semibold text-gray-800">Predictive Engine</h4>
+                            <p class="text-sm text-gray-600">Evolution from reactive to predictive care</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-green-50 rounded-lg">
+                        <p class="text-sm font-semibold text-green-800">Vision: Market Leadership</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Model -->
+            <div class="mt-16 glass-morphism rounded-2xl p-8">
+                <h3 class="text-2xl font-bold text-center mb-8 text-gray-800">Revenue Model: B2B2C Flywheel</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-6 rounded-xl bg-green-50">
+                        <div class="text-4xl mb-4">🆓</div>
+                        <h4 class="font-bold text-gray-800 mb-2">Freemium</h4>
+                        <p class="text-gray-600 text-sm">Core features free for families to drive mass adoption</p>
+                    </div>
+                    <div class="text-center p-6 rounded-xl bg-blue-50">
+                        <div class="text-4xl mb-4">💼</div>
+                        <h4 class="font-bold text-gray-800 mb-2">Enterprise</h4>
+                        <p class="text-gray-600 text-sm">₹500-800 PPPM for hospital Mission Control dashboard</p>
+                    </div>
+                    <div class="text-center p-6 rounded-xl bg-purple-50">
+                        <div class="text-4xl mb-4">📊</div>
+                        <h4 class="font-bold text-gray-800 mb-2">Data Insights</h4>
+                        <p class="text-gray-600 text-sm">Premium analytics and predictive intelligence services</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Criteria Section 4: Software/Hardware & Dashboard Mockups -->
+    <section id="dashboards" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black gradient-text mb-6">04. Software Platform & User Dashboards</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
+                    Listria is fundamentally a <strong>software-based platform</strong> with three distinct user interfaces optimized for Indian healthcare workflows.
+                </p>
+                
+                <!-- Software vs Hardware Justification -->
+                <div class="glass-morphism rounded-2xl p-8 max-w-4xl mx-auto mb-12">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Why Software-First Approach?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="smartphone" class="w-8 h-8 text-blue-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">Universal Access</h4>
+                            <p class="text-sm text-gray-600">PWA works on any smartphone browser - no app store barriers</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="dollar-sign" class="w-8 h-8 text-green-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">Cost-Effective</h4>
+                            <p class="text-sm text-gray-600">No hardware costs - aligns with freemium model</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="settings" class="w-8 h-8 text-purple-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">Hardware Agnostic</h4>
+                            <p class="text-sm text-gray-600">Integrates with existing devices - wearables optional</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Toggle Section -->
+            <div class="mb-12">
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <button class="profile-toggle active px-8 py-4 rounded-full border-2 border-blue-500 font-semibold transition-all" data-profile="patient">
+                        <i data-lucide="user" class="w-5 h-5 inline mr-2"></i>
+                        Patient Dashboard
+                    </button>
+                    <button class="profile-toggle px-8 py-4 rounded-full border-2 border-gray-300 font-semibold transition-all" data-profile="caregiver">
+                        <i data-lucide="heart" class="w-5 h-5 inline mr-2"></i>
+                        Caregiver Dashboard
+                    </button>
+                    <button class="profile-toggle px-8 py-4 rounded-full border-2 border-gray-300 font-semibold transition-all" data-profile="provider">
+                        <i data-lucide="stethoscope" class="w-5 h-5 inline mr-2"></i>
+                        Provider Dashboard
+                    </button>
+                </div>
+
+                <!-- Dashboard Container -->
+                <div class="dashboard-container">
+                    
+                    <!-- Patient Dashboard -->
+                    <div id="patient-dashboard" class="dashboard-mockup">
+                        <div class="mockup-header">
+                            <div class="flex">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 ml-4">Patient Recovery Dashboard</h3>
+                            <div class="ml-auto flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">Recovery Progress</span>
+                                <div class="toggle-switch active" data-feature="gamification"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- Today's Progress -->
+                            <div class="lg:col-span-2">
+                                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-4">Today's Recovery Tasks</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                                    <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                                                </div>
+                                                <span class="text-gray-700">Morning medication taken</span>
+                                            </div>
+                                            <span class="text-green-600 font-medium">Completed</span>
+                                        </div>
+                                        <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+                                                    <span class="text-white text-xs font-bold">!</span>
+                                                </div>
+                                                <span class="text-gray-700">Breathing exercises (10 min)</span>
+                                            </div>
+                                            <span class="text-yellow-600 font-medium">Pending</span>
+                                        </div>
+                                        <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+                                                    <i data-lucide="clock" class="w-4 h-4 text-gray-500"></i>
+                                                </div>
+                                                <span class="text-gray-700">Evening wound check</span>
+                                            </div>
+                                            <span class="text-gray-500 font-medium">Later</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Symptom Logging -->
+                                <div class="bg-white border-2 border-gray-200 rounded-xl p-6">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-4">Quick Symptom Check</h4>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                            <div class="text-2xl mb-2">😊</div>
+                                            <span class="text-sm text-gray-600">Feeling Good</span>
+                                        </div>
+                                        <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                            <div class="text-2xl mb-2">🤒</div>
+                                            <span class="text-sm text-gray-600">Not Feeling Well</span>
+                                        </div>
+                                    </div>
+                                    <button class="w-full mt-4 bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                        Log Detailed Symptoms
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Recovery Stats -->
+                            <div class="space-y-6">
+                                <div class="metric-card">
+                                    <h4 class="text-white/90 mb-2">Recovery Progress</h4>
+                                    <div class="text-4xl font-bold mb-2">Day 5</div>
+                                    <div class="text-white/80 text-sm">of 14-day recovery</div>
+                                    <div class="mt-4 w-full bg-white/20 rounded-full h-2">
+                                        <div class="bg-white h-2 rounded-full" style="width: 35%"></div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-xl p-6 shadow-lg">
+                                    <h4 class="font-bold text-gray-800 mb-4">Pain Tracking</h4>
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-green-600 mb-2">3/10</div>
+                                        <p class="text-sm text-gray-600">Current pain level</p>
+                                        <div class="mt-4 text-xs text-green-600 bg-green-50 rounded-lg p-2">
+                                            Improving! Down from 6/10 yesterday
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-xl p-6 shadow-lg">
+                                    <h4 class="font-bold text-gray-800 mb-4">Achievements</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center mr-3">
+                                                <span class="text-yellow-800 text-xs">🏆</span>
+                                            </div>
+                                            <span class="text-sm text-gray-700">5-day streak</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center mr-3">
+                                                <span class="text-blue-800 text-xs">💊</span>
+                                            </div>
+                                            <span class="text-sm text-gray-700">Medication master</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Caregiver Dashboard -->
+                    <div id="caregiver-dashboard" class="dashboard-mockup hidden">
+                        <div class="mockup-header">
+                            <div class="flex">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 ml-4">Caregiver Command Center</h3>
+                            <div class="ml-auto flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">Smart Alerts</span>
+                                <div class="toggle-switch active" data-feature="alerts"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                            <!-- Patient Status Overview -->
+                            <div class="lg:col-span-3">
+                                <!-- Status Cards -->
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="bg-green-50 border-l-4 border-green-500 rounded-lg p-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                                <i data-lucide="heart" class="w-5 h-5 text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-green-800">Overall Status</h4>
+                                                <p class="text-green-600 text-sm">Good Progress</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-lg p-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+                                                <i data-lucide="thermometer" class="w-5 h-5 text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-yellow-800">Temperature</h4>
+                                                <p class="text-yellow-600 text-sm">Monitor Closely</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                                <i data-lucide="pill" class="w-5 h-5 text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-blue-800">Medication</h4>
+                                                <p class="text-blue-600 text-sm">On Schedule</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Daily Care Tasks -->
+                                <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-4">Today's Care Tasks</h4>
+                                    <div class="space-y-4">
+                                        <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
+                                            <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mt-1">
+                                                <span class="text-white text-xs font-bold">1</span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h5 class="font-semibold text-gray-800">Morning Wound Care</h5>
+                                                <p class="text-gray-600 text-sm mb-2">Clean area gently, apply prescribed ointment, replace bandage</p>
+                                                <button class="text-blue-600 text-sm font-medium hover:underline">Watch how-to video →</button>
+                                            </div>
+                                            <button class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                                                Mark Complete
+                                            </button>
+                                        </div>
+                                        <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
+                                            <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mt-1">
+                                                <span class="text-white text-xs font-bold">2</span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h5 class="font-semibold text-gray-800">Assist with Exercises</h5>
+                                                <p class="text-gray-600 text-sm mb-2">Help with 10-minute breathing exercises and gentle mobility</p>
+                                                <button class="text-blue-600 text-sm font-medium hover:underline">Exercise guide →</button>
+                                            </div>
+                                            <button class="bg-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium">
+                                                Pending
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Communication Panel -->
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-4">Quick Communication</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <button class="flex items-center justify-center space-x-2 bg-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                                            <span>Message Care Team</span>
+                                        </button>
+                                        <button class="flex items-center justify-center space-x-2 bg-red-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-600 transition-colors">
+                                            <i data-lucide="phone" class="w-5 h-5"></i>
+                                            <span>Emergency Call</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI Insights & Alerts -->
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+                                    <h4 class="font-bold mb-4">AI Health Assistant</h4>
+                                    <div class="space-y-3">
+                                        <div class="bg-white/20 rounded-lg p-3">
+                                            <div class="flex items-center mb-2">
+                                                <i data-lucide="brain" class="w-4 h-4 mr-2"></i>
+                                                <span class="text-sm font-medium">Latest Analysis</span>
+                                            </div>
+                                            <p class="text-xs text-white/90">Recovery progressing well. Slight temperature increase noted - continue monitoring.</p>
+                                        </div>
+                                        <button class="w-full bg-white/20 text-white py-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors">
+                                            View Full Report
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <h4 class="font-bold text-gray-800 mb-4">Learning Resources</h4>
+                                    <div class="space-y-3">
+                                        <div class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                            <h5 class="font-medium text-gray-800 text-sm">Post-Op Nutrition</h5>
+                                            <p class="text-xs text-gray-600">5 min read</p>
+                                        </div>
+                                        <div class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                            <h5 class="font-medium text-gray-800 text-sm">Managing Pain</h5>
+                                            <p class="text-xs text-gray-600">3 min video</p>
+                                        </div>
+                                        <div class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                            <h5 class="font-medium text-gray-800 text-sm">Warning Signs</h5>
+                                            <p class="text-xs text-gray-600">2 min read</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <h4 class="font-bold text-gray-800 mb-4">Family Support</h4>
+                                    <div class="text-center">
+                                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                            <i data-lucide="users" class="w-8 h-8 text-green-600"></i>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-3">Connect with other caregivers</p>
+                                        <button class="w-full bg-green-500 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition-colors">
+                                            Join Support Group
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Provider Dashboard -->
+                    <div id="provider-dashboard" class="dashboard-mockup hidden">
+                        <div class="mockup-header">
+                            <div class="flex">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 ml-4">Provider Mission Control</h3>
+                            <div class="ml-auto flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">Population Health</span>
+                                <div class="toggle-switch active" data-feature="population"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- Key Metrics -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h4 class="text-white/90 text-sm font-medium">Active Patients</h4>
+                                            <div class="text-3xl font-bold">247</div>
+                                        </div>
+                                        <i data-lucide="users" class="w-8 h-8 text-white/70"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h4 class="text-white/90 text-sm font-medium">Low Risk</h4>
+                                            <div class="text-3xl font-bold">228</div>
+                                        </div>
+                                        <i data-lucide="check-circle" class="w-8 h-8 text-white/70"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h4 class="text-white/90 text-sm font-medium">Medium Risk</h4>
+                                            <div class="text-3xl font-bold">15</div>
+                                        </div>
+                                        <i data-lucide="alert-triangle" class="w-8 h-8 text-white/70"></i>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-6 text-white">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h4 class="text-white/90 text-sm font-medium">High Risk</h4>
+                                            <div class="text-3xl font-bold">4</div>
+                                        </div>
+                                        <i data-lucide="alert-circle" class="w-8 h-8 text-white/70"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <!-- High Priority Alerts -->
+                                <div class="lg:col-span-2">
+                                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                        <h4 class="text-lg font-bold text-gray-800 mb-4">Priority Alerts</h4>
+                                        <div class="space-y-4">
+                                            <div class="p-4 border-l-4 border-red-500 bg-red-50 rounded-lg">
+                                                <div class="flex items-start justify-between">
+                                                    <div>
+                                                        <h5 class="font-semibold text-red-800">Rajesh Kumar - Post-Op Day 3</h5>
+                                                        <p class="text-red-700 text-sm mb-2">High fever (101.8°F) + wound redness reported</p>
+                                                        <p class="text-red-600 text-xs">Surgery: Appendectomy | Caregiver: Wife</p>
+                                                    </div>
+                                                    <button class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600">
+                                                        Contact Now
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4 border-l-4 border-yellow-500 bg-yellow-50 rounded-lg">
+                                                <div class="flex items-start justify-between">
+                                                    <div>
+                                                        <h5 class="font-semibold text-yellow-800">Priya Sharma - Post-Op Day 7</h5>
+                                                        <p class="text-yellow-700 text-sm mb-2">Persistent pain level 7/10 for 2 days</p>
+                                                        <p class="text-yellow-600 text-xs">Surgery: C-Section | Caregiver: Mother</p>
+                                                    </div>
+                                                    <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-600">
+                                                        Review
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-4 border-l-4 border-blue-500 bg-blue-50 rounded-lg">
+                                                <div class="flex items-start justify-between">
+                                                    <div>
+                                                        <h5 class="font-semibold text-blue-800">Amit Patel - Post-Op Day 1</h5>
+                                                        <p class="text-blue-700 text-sm mb-2">Caregiver has questions about medication timing</p>
+                                                        <p class="text-blue-600 text-xs">Surgery: Gallbladder | Caregiver: Son</p>
+                                                    </div>
+                                                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-600">
+                                                        Respond
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Analytics Dashboard -->
+                                    <div class="bg-white border border-gray-200 rounded-xl p-6 mt-6">
+                                        <h4 class="text-lg font-bold text-gray-800 mb-4">30-Day Analytics</h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                                <div class="text-2xl font-bold text-green-600">8.2%</div>
+                                                <p class="text-sm text-gray-600">Readmission Rate</p>
+                                                <p class="text-xs text-green-600">↓ 12% vs baseline</p>
+                                            </div>
+                                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                                <div class="text-2xl font-bold text-blue-600">94%</div>
+                                                <p class="text-sm text-gray-600">Patient Engagement</p>
+                                                <p class="text-xs text-blue-600">↑ 18% this month</p>
+                                            </div>
+                                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                                <div class="text-2xl font-bold text-purple-600">4.2</div>
+                                                <p class="text-sm text-gray-600">Avg Response Time (hrs)</p>
+                                                <p class="text-xs text-purple-600">↓ 40% improvement</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tools & Resources -->
+                                <div class="space-y-6">
+                                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                        <h4 class="font-bold text-gray-800 mb-4">Quick Actions</h4>
+                                        <div class="space-y-3">
+                                            <button class="w-full flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                                                <span class="text-blue-800 font-medium">Bulk Message</span>
+                                                <i data-lucide="send" class="w-4 h-4 text-blue-600"></i>
+                                            </button>
+                                            <button class="w-full flex items-center justify-between p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                                                <span class="text-green-800 font-medium">Schedule Follow-ups</span>
+                                                <i data-lucide="calendar" class="w-4 h-4 text-green-600"></i>
+                                            </button>
+                                            <button class="w-full flex items-center justify-between p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                                                <span class="text-purple-800 font-medium">Generate Report</span>
+                                                <i data-lucide="bar-chart" class="w-4 h-4 text-purple-600"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                        <h4 class="font-bold text-gray-800 mb-4">AI Insights</h4>
+                                        <div class="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg">
+                                            <h5 class="font-semibold text-indigo-800 mb-2">Pattern Detected</h5>
+                                            <p class="text-sm text-indigo-700 mb-3">Patients with family caregiver engagement >80% show 60% lower complication rates.</p>
+                                            <button class="text-indigo-600 text-sm font-medium hover:underline">
+                                                View full analysis →
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                        <h4 class="font-bold text-gray-800 mb-4">Team Collaboration</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                                    <span class="text-white text-xs font-bold">DN</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-800">Dr. Nurse</p>
+                                                    <p class="text-xs text-gray-600">Online</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                                    <span class="text-white text-xs font-bold">NP</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-800">Nurse Practitioner</p>
+                                                    <p class="text-xs text-gray-600">Available</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Criteria Section 5: Why Select Our Team -->
+    <section id="team-selection" class="criteria-section relative z-10">
+        <div class="relative z-10 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black mb-6">05. Why Select Our Team for This Project</h2>
+                <p class="text-xl text-blue-100 max-w-4xl mx-auto">
+                    We bring a rare combination of deep market insight, strategically sound business model, and clear vision for both commercial success and profound social impact.
+                </p>
+            </div>
+
+            <div class="card-grid-2">
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-blue-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="brain-circuit" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Deep Problem Understanding</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">We have identified and analyzed the core problem: the unsupported family caregiver as the system's single point of failure and greatest leverage point.</p>
+                    </div>
+                    <div class="card-footer text-sm text-blue-600 font-medium bg-blue-50 rounded-lg p-3">
+                        Human-centric insight will drive our entire strategy
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-green-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="flask-conical" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Evidence-Based Foundation</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">Our approach is based on proven research. Organizations like Noora Health demonstrate 71% complication reduction through caregiver empowerment.</p>
+                    </div>
+                    <div class="card-footer text-sm text-green-600 font-medium bg-green-50 rounded-lg p-3">
+                        Market validation from existing successful interventions
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-purple-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="route" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Pragmatic Execution Plan</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">We present a detailed, phased implementation plan from cost-effective MVP to targeted pilot with clear KPIs. Our B2B2C flywheel is designed to address user acquisition challenges.</p>
+                    </div>
+                    <div class="card-footer text-sm text-purple-600 font-medium bg-purple-50 rounded-lg p-3">
+                        Strategic MVP → Targeted pilot → Scalable market presence
+                    </div>
+                </div>
+
+                <div class="floating-card glass-morphism rounded-2xl p-8 border-l-4 border-orange-500">
+                    <div class="card-content">
+                        <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i data-lucide="database-zap" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Future-Proof Enterprise</h3>
+                        <p class="text-gray-600 mb-6 flex-grow">Our vision includes building a proprietary data moat for predictive AI engine. This represents a long-term, defensible solution to a national crisis.</p>
+                    </div>
+                    <div class="card-footer text-sm text-orange-600 font-medium bg-orange-50 rounded-lg p-3">
+                        Beyond app → Proposed data-driven healthcare transformation
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impact Metrics -->
+            <div class="mt-16 glass-morphism rounded-2xl p-8">
+                <h3 class="text-2xl font-bold text-center mb-8 text-gray-800">Projected Impact Potential</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">9 Million</div>
+                        <p class="text-gray-600 font-medium">Complications We Could Prevent</p>
+                        <p class="text-sm text-gray-500">Targeting 30% reduction at scale</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">₹3,96,000 Cr</div>
+                        <p class="text-gray-600 font-medium">Potential Family Savings</p>
+                        <p class="text-sm text-gray-500">Preventing financial catastrophe</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">20 Lakh</div>
+                        <p class="text-gray-600 font-medium">Hospital Beds to be Freed</p>
+                        <p class="text-sm text-gray-500">Through reduced readmissions</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">50 Million</div>
+                        <p class="text-gray-600 font-medium">Caregivers to Empower</p>
+                        <p class="text-sm text-gray-500">Our vision for transformation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Strengths -->
+            <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-morphism rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Technical Excellence</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="code" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Scalable Architecture</h4>
+                                <p class="text-gray-600 text-sm">PWA + Microservices designed for India's diverse digital landscape</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">DPDPA Compliance</h4>
+                                <p class="text-gray-600 text-sm">Privacy-by-design architecture for healthcare data protection</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">AI Integration</h4>
+                                <p class="text-gray-600 text-sm">Smart triage engine evolving from reactive to predictive care</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-morphism rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Market Strategy</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="users" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">User-Centric Design</h4>
+                                <p class="text-gray-600 text-sm">Built for real Indian families, not Western healthcare systems</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Scalable Go-to-Market</h4>
+                                <p class="text-gray-600 text-sm">B2B2C flywheel leveraging freemium adoption for enterprise sales</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="globe" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Market Positioning</h4>
+                                <p class="text-gray-600 text-sm">First-mover in caregiver-centric post-operative care ecosystem</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="mt-16 text-center">
+                <div class="glass-morphism rounded-2xl p-12 max-w-4xl mx-auto">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">Ready to Build & Transform Indian Healthcare</h3>
+                    <p class="text-xl text-gray-600 mb-8">
+                        We propose to build more than just another health-tech app. We envision creating the new standard of care in India - connecting the disconnected, guiding the uncertain, and empowering the overwhelmed.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full px-8 py-4 font-bold text-lg shadow-lg">
+                            🚀 Innovation-Driven
+                        </div>
+                        <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full px-8 py-4 font-bold text-lg shadow-lg">
+                            💡 Evidence-Based
+                        </div>
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full px-8 py-4 font-bold text-lg shadow-lg">
+                            🎯 Market-Ready
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Our Proposed Mission</h4>
+                        <p class="text-gray-700 text-lg">
+                            "Guided Recovery. Empowered Families. A Healthier India."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Interactive AI Demo Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black gradient-text mb-6">Live Demo: AI Triage in Action</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
+                    Experience the power of our AI engine. This is how we close the communication loop in seconds, preventing unnecessary panic and ensuring the right response.
+                </p>
+                
+                <!-- Scenario Setup -->
+                <div class="glass-morphism rounded-2xl p-8 max-w-4xl mx-auto mb-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="text-left">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">The Scenario</h3>
+                            <p class="text-gray-700 mb-4">
+                                Mr. Sharma feels feverish that evening. Priya, his daughter and caregiver, opens the Listria app to log his symptoms and get instant AI-powered guidance.
+                            </p>
+                            <div class="bg-blue-50 rounded-lg p-4">
+                                <p class="text-blue-800 font-semibold">Two Possible Outcomes:</p>
+                                <p class="text-blue-700 text-sm mt-2">
+                                    <strong>Low Risk:</strong> Reassuring guidance prevents unnecessary ER visit<br>
+                                    <strong>High Risk:</strong> Immediate escalation to healthcare team
+                                </p>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl p-6">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i data-lucide="smartphone" class="w-8 h-8 text-white"></i>
+                                    </div>
+                                    <h4 class="font-bold text-gray-800">Priya's Phone</h4>
+                                    <p class="text-gray-600 text-sm">Listria Caregiver App</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-morphism rounded-2xl p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Input Section -->
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                                <span class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">1</span>
+                                Priya Logs Symptoms
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">What Priya observes about her father:</label>
+                                    <textarea 
+                                        id="symptom-input" 
+                                        rows="4" 
+                                        class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                                        placeholder="Try: 'Dad has a fever of 101.8°F, the surgical wound looks red and feels warm. He's also having more pain than yesterday.'"
+                                    ></textarea>
+                                </div>
+                                
+                                <button 
+                                    id="triage-button" 
+                                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-4 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                >
+                                    <i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>
+                                    Submit to AI Triage
+                                </button>
+                                
+                                <div class="text-xs text-gray-500 text-center">
+                                    <i data-lucide="shield-check" class="w-4 h-4 inline mr-1"></i>
+                                    Powered by Gemini AI • DPDPA Compliant
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Output Section -->
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                                <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">2</span>
+                                Instant AI Response
+                            </h3>
+                            
+                            <div id="triage-loader" class="hidden flex items-center justify-center p-8">
+                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                                <span class="ml-4 text-gray-600">AI analyzing symptoms...</span>
+                            </div>
+                            
+                            <div id="triage-response" class="min-h-[200px] p-6 rounded-xl bg-gray-50 border-2 border-gray-200 flex items-center justify-center">
+                                <div class="text-center">
+                                    <i data-lucide="brain" class="w-12 h-12 mx-auto mb-3 text-gray-400"></i>
+                                    <p class="text-gray-500">AI assessment will appear here</p>
+                                    <p class="text-xs text-gray-400 mt-2">Enter a symptom above to see the magic happen</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workflow Visualization -->
+                    <div class="mt-12 pt-8 border-t border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
+                            <span class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">3</span>
+                            Coordinated Response Workflow
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center p-6 bg-blue-50 rounded-xl">
+                                <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="smartphone" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Caregiver Alert</h4>
+                                <p class="text-sm text-gray-600">Instant notification with clear guidance and next steps</p>
+                            </div>
+                            <div class="text-center p-6 bg-purple-50 rounded-xl">
+                                <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="monitor" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Provider Dashboard</h4>
+                                <p class="text-sm text-gray-600">Risk-prioritized alert on Mission Control interface</p>
+                            </div>
+                            <div class="text-center p-6 bg-green-50 rounded-xl">
+                                <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="phone-call" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Immediate Action</h4>
+                                <p class="text-sm text-gray-600">Coordinated response preventing escalation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-4 mb-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="heart-pulse" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <span class="text-3xl font-bold gradient-text">Project Listria</span>
+                </div>
+                
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Connecting the Circle of Care • Empowering Families • Transforming Recovery
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-8 mb-8 text-gray-400">
+                    <span>🏥 Software Platform</span>
+                    <span>🤖 AI-Powered</span>
+                    <span>🇮🇳 Made for India</span>
+                    <span>📱 Progressive Web App</span>
+                    <span>🔒 DPDPA Compliant</span>
+                </div>
+                
+                <div class="text-lg font-semibold text-gray-300">
+                    "Guided Recovery. Empowered Families. A Healthier India."
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-700 text-sm text-gray-400">
+                    <p>© 2024 Project Listria • Pitch Deck Proposal • Team Innovation Hub</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Animated counters
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    start = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(start).toLocaleString('en-IN');
+            }, 16);
+        }
+
+        // Profile toggle functionality
+        const profileToggles = document.querySelectorAll('.profile-toggle');
+        const dashboards = {
+            'patient': document.getElementById('patient-dashboard'),
+            'caregiver': document.getElementById('caregiver-dashboard'),
+            'provider': document.getElementById('provider-dashboard')
+        };
+
+        profileToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const profile = toggle.dataset.profile;
+                
+                // Update toggle states
+                profileToggles.forEach(t => t.classList.remove('active'));
+                toggle.classList.add('active');
+                
+                // Show corresponding dashboard
+                Object.values(dashboards).forEach(d => d.classList.add('hidden'));
+                dashboards[profile].classList.remove('hidden');
+            });
+        });
+
+        // Toggle switch functionality
+        const toggleSwitches = document.querySelectorAll('.toggle-switch');
+        toggleSwitches.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        // AI Triage Demo
+        const triageButton = document.getElementById('triage-button');
+        const symptomInput = document.getElementById('symptom-input');
+        const triageResponseDiv = document.getElementById('triage-response');
+        const triageLoader = document.getElementById('triage-loader');
+
+        triageButton.addEventListener('click', async () => {
+            const userInput = symptomInput.value.trim();
+            if (!userInput) {
+                triageResponseDiv.innerHTML = `
+                    <div class="text-center">
+                        <i data-lucide="alert-circle" class="w-8 h-8 mx-auto mb-2 text-red-400"></i>
+                        <p class="text-red-500 font-medium">Please enter a symptom to analyze.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Show loading state
+            triageLoader.classList.remove('hidden');
+            triageResponseDiv.classList.add('hidden');
+            triageButton.disabled = true;
+            triageButton.innerHTML = '<i data-lucide="loader" class="w-5 h-5 inline mr-2 animate-spin"></i>Analyzing...';
+
+            const prompt = `You are 'Listria AI Triage', a healthcare AI assistant for post-surgical recovery monitoring. Analyze this symptom report and provide assessment.
+
+            Symptom Report: "${userInput}"
+
+            Provide response in this format:
+            
+            [RISK_LEVEL: LOW/MEDIUM/HIGH]
+            
+            ASSESSMENT: [Brief clinical assessment]
+            
+            IMMEDIATE_ACTION: [What caregiver should do now]
+            
+            PROVIDER_ALERT: [Whether to alert healthcare team - YES/NO]
+            
+            Keep response professional, clear, and actionable. This is for demonstration only.`;
+            
+            try {
+                // Simulate API call with timeout
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Mock response based on input analysis
+                const isHighRisk = userInput.toLowerCase().includes('fever') && 
+                                 (userInput.toLowerCase().includes('red') || 
+                                  userInput.toLowerCase().includes('warm') ||
+                                  userInput.toLowerCase().includes('swelling'));
+                
+                const isMediumRisk = userInput.toLowerCase().includes('pain') && 
+                                   userInput.toLowerCase().includes('increased');
+
+                let response;
+                if (isHighRisk) {
+                    response = `
+                        <div class="text-left space-y-4">
+                            <div class="flex items-center space-x-2 mb-4">
+                                <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                                <span class="font-bold text-red-800">HIGH RISK ALERT</span>
+                            </div>
+                            
+                            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                                <h4 class="font-semibold text-red-800 mb-2">ASSESSMENT:</h4>
+                                <p class="text-red-700 text-sm">Fever combined with wound inflammation suggests possible surgical site infection. Requires immediate medical attention.</p>
+                            </div>
+                            
+                            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                                <h4 class="font-semibold text-yellow-800 mb-2">IMMEDIATE ACTION:</h4>
+                                <p class="text-yellow-700 text-sm">Do not delay - contact healthcare provider immediately. Take photos of wound area and monitor temperature every 2 hours.</p>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                                <h4 class="font-semibold text-blue-800 mb-2">PROVIDER ALERT:</h4>
+                                <p class="text-blue-700 text-sm">✅ HIGH PRIORITY alert sent to care team. Expect contact within 30 minutes.</p>
+                            </div>
+                        </div>
+                    `;
+                } else if (isMediumRisk) {
+                    response = `
+                        <div class="text-left space-y-4">
+                            <div class="flex items-center space-x-2 mb-4">
+                                <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                                <span class="font-bold text-yellow-800">MEDIUM RISK - MONITOR</span>
+                            </div>
+                            
+                            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                                <h4 class="font-semibold text-yellow-800 mb-2">ASSESSMENT:</h4>
+                                <p class="text-yellow-700 text-sm">Increased pain levels warrant attention. May indicate normal healing process but should be monitored closely.</p>
+                            </div>
+                            
+                            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                                <h4 class="font-semibold text-green-800 mb-2">IMMEDIATE ACTION:</h4>
+                                <p class="text-green-700 text-sm">Continue prescribed pain medication. Log pain levels every 4 hours. Contact care team if pain reaches 8/10 or worsens.</p>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                                <h4 class="font-semibold text-blue-800 mb-2">PROVIDER ALERT:</h4>
+                                <p class="text-blue-700 text-sm">📋 Added to monitoring queue. Care team will review within 4 hours.</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    response = `
+                        <div class="text-left space-y-4">
+                            <div class="flex items-center space-x-2 mb-4">
+                                <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                                <span class="font-bold text-green-800">LOW RISK - NORMAL</span>
+                            </div>
+                            
+                            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                                <h4 class="font-semibold text-green-800 mb-2">ASSESSMENT:</h4>
+                                <p class="text-green-700 text-sm">Symptoms appear within normal post-operative range. Continue current care routine.</p>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                                <h4 class="font-semibold text-blue-800 mb-2">IMMEDIATE ACTION:</h4>
+                                <p class="text-blue-700 text-sm">Continue prescribed medications and wound care. Log symptoms daily and contact team with any concerns.</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 border-l-4 border-gray-400 p-4 rounded">
+                                <h4 class="font-semibold text-gray-800 mb-2">PROVIDER ALERT:</h4>
+                                <p class="text-gray-700 text-sm">📝 Logged for routine review. No immediate action required.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                triageResponseDiv.innerHTML = response;
+
+            } catch (error) {
+                console.error("Triage demo error:", error);
+                triageResponseDiv.innerHTML = `
+                    <div class="text-center">
+                        <i data-lucide="wifi-off" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
+                        <p class="text-gray-500">Demo temporarily unavailable. Please try again.</p>
+                    </div>
+                `;
+            } finally {
+                triageLoader.classList.add('hidden');
+                triageResponseDiv.classList.remove('hidden');
+                triageButton.disabled = false;
+                triageButton.innerHTML = '<i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>Analyze with AI Triage ✨';
+                lucide.createIcons();
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize animations when page loads
+        window.addEventListener('load', () => {
+            // Animate counters
+            const surgeryCounter = document.getElementById('counter-surgeries');
+            const complicationCounter = document.getElementById('counter-complications');
+            
+            if (surgeryCounter) animateCounter(surgeryCounter, 3);
+            if (complicationCounter) animateCounter(complicationCounter, 30);
+            
+            // Initialize icons
+            lucide.createIcons();
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all floating cards
+        document.querySelectorAll('.floating-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+
+    <style>
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .bg-grid-pattern {
+            background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</body>
+</html>
+ 
